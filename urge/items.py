@@ -22,13 +22,16 @@ class UrgeItem(scrapy.Item):
     product_sale_price = scrapy.Field(serializer=int)
 
 
+price_pattern = re.compile(r'\d+', re.I)
+
+
 def filter_price(value: str) -> Optional[int]:
     """
     Remove '$' and return in decimals i.e $99.95 should be returned as 9995
     :param value:
     :return:
     """
-    price = re.findall(r'\d+', value, re.I)
+    price = price_pattern.findall(value)
     if price:
         return int(''.join(price))
 

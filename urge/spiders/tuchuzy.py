@@ -11,11 +11,11 @@ class TuchuzySpider(CrawlSpider):
     allowed_domains = ['tuchuzy.com']
     start_urls = ['https://www.tuchuzy.com']
     rules = (
-        # Extract links matching 'collections/' and parse them with the spider's method parse_item.
+        # Extract links matching 'collections/' and parse them with the spider's method parse_category.
         Rule(LinkExtractor(allow='collections/.*'), callback='parse_category'),
     )
 
-    def parse_category(self, response: HtmlResponse):
+    def parse_category(self, response: HtmlResponse) -> HtmlResponse:
         """
             List category and traverse product pages.
         """
@@ -36,7 +36,7 @@ class TuchuzySpider(CrawlSpider):
                 yield response.follow(product_url, callback=self.product_page, meta={'item': item_loader.load_item()})
 
     @staticmethod
-    def product_page(response: HtmlResponse):
+    def product_page(response: HtmlResponse) -> dict:
         """
             Crawl meta information of products from the product page.
         """
